@@ -171,7 +171,7 @@ namespace Ookii.Dialogs.Wpf
                 int result = dialog.Show(owner);
                 if( result < 0 )
                 {
-                    if( (uint)result == (uint)HRESULT.ERROR_CANCELLED )
+                    if( result == (int)HRESULT.ERROR_CANCELLED )
                         return false;
                     else
                         throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);

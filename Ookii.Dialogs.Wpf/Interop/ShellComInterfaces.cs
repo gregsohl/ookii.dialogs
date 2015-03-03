@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 // Disable warning CS0108: 'x' hides inherited member 'y'. Use the new keyword if hiding was intended.
 #pragma warning disable 0108
@@ -520,7 +518,7 @@ namespace Ookii.Dialogs.Wpf.Interop
         void OnControlActivating([In, MarshalAs(UnmanagedType.Interface)] IFileDialogCustomize pfdc, [In] int dwIDCtl);
     }
 
-    [ComImport, 
+    [ComImport,
     Guid(IIDGuid.IPropertyStore),
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyStore
@@ -551,8 +549,7 @@ namespace Ookii.Dialogs.Wpf.Interop
         /// <param name="cb">Size, in bytes, of the memory block to be allocated.</param>
         /// <returns>a pointer to the allocated memory block.</returns>
         [PreserveSig]
-        IntPtr Alloc(
-            [In] UInt32 cb);
+        IntPtr Alloc([In] UInt32 cb);
 
         /// <summary>
         /// Changes the size of a previously allocated memory block.
@@ -561,19 +558,14 @@ namespace Ookii.Dialogs.Wpf.Interop
         /// <param name="cb">Size of the memory block, in bytes, to be reallocated.</param>
         /// <returns>reallocated memory block</returns>
         [PreserveSig]
-        IntPtr Realloc(
-            [In] IntPtr pv,
-            [In] UInt32 cb);
+        IntPtr Realloc([In] IntPtr pv, [In] UInt32 cb);
 
         /// <summary>
         /// Free a previously allocated block of memory.
         /// </summary>
         /// <param name="pv">Pointer to the memory block to be freed.</param>
         [PreserveSig]
-        void Free(
-            [In] IntPtr pv);
-
-
+        void Free([In] IntPtr pv);
 
         /// <summary>
         /// This method returns the size, in bytes, of a memory block previously allocated with IMalloc::Alloc or IMalloc::Realloc.
@@ -581,8 +573,7 @@ namespace Ookii.Dialogs.Wpf.Interop
         /// <param name="pv">Pointer to the memory block for which the size is requested</param>
         /// <returns>The size of the allocated memory block in bytes.</returns>
         [PreserveSig]
-        UInt32 GetSize(
-            [In] IntPtr pv);
+        uint GetSize([In] IntPtr pv);
 
         /// <summary>
         /// This method determines whether this allocator was used to allocate the specified block of memory.
@@ -594,13 +585,12 @@ namespace Ookii.Dialogs.Wpf.Interop
         /// -1 if DidAlloc is unable to determine whether or not it allocated the memory block.
         /// </returns>
         [PreserveSig]
-        Int16 DidAlloc(
-            [In] IntPtr pv);
+        short DidAlloc([In] IntPtr pv);
 
         /// <summary>
         /// Minimizes the heap by releasing unused memory to the operating system.
         /// </summary>
         [PreserveSig]
         void HeapMinimize();
-    } 
+    }
 }

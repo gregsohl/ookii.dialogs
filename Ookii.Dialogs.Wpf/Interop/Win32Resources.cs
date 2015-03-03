@@ -1,7 +1,7 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
 // See license.txt for details
+
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Ookii.Dialogs.Wpf.Interop
@@ -14,7 +14,7 @@ namespace Ookii.Dialogs.Wpf.Interop
         public Win32Resources(string module)
         {
             _moduleHandle = NativeMethods.LoadLibraryEx(module, IntPtr.Zero, NativeMethods.LoadLibraryExFlags.LoadLibraryAsDatafile);
-            if( _moduleHandle.IsInvalid )
+            if (_moduleHandle.IsInvalid)
                 throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
         }
 
@@ -23,7 +23,7 @@ namespace Ookii.Dialogs.Wpf.Interop
             CheckDisposed();
 
             StringBuilder buffer = new StringBuilder(_bufferSize);
-            if( NativeMethods.LoadString(_moduleHandle, id, buffer, buffer.Capacity + 1) == 0 )
+            if (NativeMethods.LoadString(_moduleHandle, id, buffer, buffer.Capacity + 1) == 0)
                 throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             return buffer.ToString();
         }
@@ -41,7 +41,7 @@ namespace Ookii.Dialogs.Wpf.Interop
             IntPtr sourcePtr = System.Runtime.InteropServices.Marshal.StringToHGlobalAuto(source);
             try
             {
-                if( NativeMethods.FormatMessage(flags, sourcePtr, id, 0, ref buffer, 0, args) == 0 )
+                if (NativeMethods.FormatMessage(flags, sourcePtr, id, 0, ref buffer, 0, args) == 0)
                     throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             }
             finally
@@ -58,13 +58,13 @@ namespace Ookii.Dialogs.Wpf.Interop
 
         protected virtual void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
                 _moduleHandle.Dispose();
         }
 
         private void CheckDisposed()
         {
-            if( _moduleHandle.IsClosed )
+            if (_moduleHandle.IsClosed)
             {
                 throw new ObjectDisposedException("Win32Resources");
             }
@@ -78,6 +78,6 @@ namespace Ookii.Dialogs.Wpf.Interop
             GC.SuppressFinalize(this);
         }
 
-        #endregion    
+        #endregion
     }
 }

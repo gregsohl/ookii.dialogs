@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Ookii.Dialogs.Wpf.Interop
@@ -37,45 +34,33 @@ namespace Ookii.Dialogs.Wpf.Interop
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IProgressDialog
     {
-
         [PreserveSig]
         void StartProgressDialog(
             IntPtr hwndParent,
             [MarshalAs(UnmanagedType.IUnknown)]
 			object punkEnableModless,
             ProgressDialogFlags dwFlags,
-            IntPtr pvResevered
+            IntPtr pvReserved
             );
 
         [PreserveSig]
         void StopProgressDialog();
 
         [PreserveSig]
-        void SetTitle(
-            [MarshalAs(UnmanagedType.LPWStr)]
-			string pwzTitle
-            );
+        void SetTitle([MarshalAs(UnmanagedType.LPWStr)]string pwzTitle);
 
         [PreserveSig]
-        void SetAnimation(
-            SafeModuleHandle hInstAnimation,
-            ushort idAnimation
-            );
+        void SetAnimation(SafeModuleHandle hInstAnimation, ushort idAnimation);
 
         [PreserveSig]
         [return: MarshalAs(UnmanagedType.Bool)]
         bool HasUserCancelled();
 
         [PreserveSig]
-        void SetProgress(
-            uint dwCompleted,
-            uint dwTotal
-            );
+        void SetProgress(uint dwCompleted, uint dwTotal);
+
         [PreserveSig]
-        void SetProgress64(
-            ulong ullCompleted,
-            ulong ullTotal
-            );
+        void SetProgress64(ulong ullCompleted, ulong ullTotal);
 
         [PreserveSig]
         void SetLine(
@@ -84,22 +69,13 @@ namespace Ookii.Dialogs.Wpf.Interop
 			string pwzString,
             [MarshalAs(UnmanagedType.VariantBool)]
 			bool fCompactPath,
-            IntPtr pvResevered
+            IntPtr pvReserved
             );
 
         [PreserveSig]
-        void SetCancelMsg(
-            [MarshalAs(UnmanagedType.LPWStr)]
-			string pwzCancelMsg,
-            object pvResevered
-            );
+        void SetCancelMsg([MarshalAs(UnmanagedType.LPWStr)]string pwzCancelMsg, object pvReserved);
 
         [PreserveSig]
-        void Timer(
-            uint dwTimerAction,
-            object pvResevered
-            );
-
+        void Timer(uint dwTimerAction, object pvReserved);
     }
-
 }

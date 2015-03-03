@@ -98,7 +98,7 @@
     <Compile Include="HyperlinkClickedEventArgs.cs" />
     <Compile Include="Interop\ComDlgResources.cs" />
     <Compile Include="Interop\COMGuids.cs" />
-    <Compile Include="Interop\ErrorHelper.cs" />
+    <Compile Include="Interop\HRESULT.cs" />
     <Compile Include="Interop\IProgressDialog.cs" />
     <Compile Include="Interop\ShellComInterfaces.cs" />
     <Compile Include="Interop\ShellWrapperDefinitions.cs" />
