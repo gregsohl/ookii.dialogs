@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace Ookii.Dialogs.Wpf
@@ -20,7 +17,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="ArgumentNullException"><paramref name="resourceFile"/> is <see langword="null"/>.</exception>
         public AnimationResource(string resourceFile, int resourceId)
         {
-            if( resourceFile == null )
+            if (resourceFile == null)
                 throw new ArgumentNullException("resourceFile");
 
             ResourceFile = resourceFile;
@@ -52,7 +49,7 @@ namespace Ookii.Dialogs.Wpf
         /// <see cref="ShellAnimation"/> enumeration.</exception>
         public static AnimationResource GetShellAnimation(ShellAnimation animation)
         {
-            if( !Enum.IsDefined(typeof(ShellAnimation), animation) )
+            if (!Enum.IsDefined(typeof(ShellAnimation), animation))
                 throw new ArgumentOutOfRangeException("animation");
 
             return new AnimationResource("shell32.dll", (int)animation);
@@ -61,10 +58,10 @@ namespace Ookii.Dialogs.Wpf
         internal SafeModuleHandle LoadLibrary()
         {
             SafeModuleHandle handle = NativeMethods.LoadLibraryEx(ResourceFile, IntPtr.Zero, NativeMethods.LoadLibraryExFlags.LoadLibraryAsDatafile);
-            if( handle.IsInvalid )
+            if (handle.IsInvalid)
             {
                 int error = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
-                if( error == NativeMethods.ErrorFileNotFound )
+                if (error == NativeMethods.ErrorFileNotFound)
                     throw new FileNotFoundException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.FileNotFoundFormat, ResourceFile));
                 else
                     throw new System.ComponentModel.Win32Exception(error);

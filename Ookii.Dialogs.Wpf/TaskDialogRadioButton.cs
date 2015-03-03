@@ -1,8 +1,6 @@
 // Copyright © Sven Groot (Ookii.org) 2009
 // BSD license; see license.txt for details.
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using System.ComponentModel;
 
 namespace Ookii.Dialogs.Wpf
@@ -30,7 +28,7 @@ namespace Ookii.Dialogs.Wpf
             : base(container)
         {
         }
-        
+
         /// <summary>
         /// Gets or sets a value that indicates whether the radio button is checked.
         /// </summary>
@@ -46,14 +44,14 @@ namespace Ookii.Dialogs.Wpf
         public bool Checked
         {
             get { return _checked; }
-            set 
+            set
             {
                 _checked = value;
-                if( value && Owner != null )
+                if (value && Owner != null)
                 {
-                    foreach( TaskDialogRadioButton radioButton in Owner.RadioButtons )
+                    foreach (TaskDialogRadioButton radioButton in Owner.RadioButtons)
                     {
-                        if( radioButton != this )
+                        if (radioButton != this)
                             radioButton.Checked = false;
                     }
                 }
@@ -69,9 +67,9 @@ namespace Ookii.Dialogs.Wpf
         /// </value>
         protected override System.Collections.IEnumerable ItemCollection
         {
-            get 
+            get
             {
-                if( Owner != null )
+                if (Owner != null)
                     return Owner.RadioButtons;
                 return null;
             }

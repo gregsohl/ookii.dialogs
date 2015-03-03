@@ -1,11 +1,9 @@
 // Copyright © Sven Groot (Ookii.org) 2009
 // BSD license; see license.txt for details.
+
 using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Collections;
+using System.ComponentModel;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -35,7 +33,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="container">The <see cref="IContainer"/> to add the <see cref="TaskDialogItem"/> to.</param>
         protected TaskDialogItem(IContainer container)
         {
-            if( container != null )
+            if (container != null)
                 container.Add(this);
 
             InitializeComponent();
@@ -65,8 +63,8 @@ namespace Ookii.Dialogs.Wpf
         public TaskDialog Owner
         {
             get { return _owner; }
-            internal set 
-            { 
+            internal set
+            {
                 _owner = value;
                 AutoAssignId();
             }
@@ -88,13 +86,13 @@ namespace Ookii.Dialogs.Wpf
         public string Text
         {
             get { return _text ?? string.Empty; }
-            set 
+            set
             {
                 _text = value;
                 UpdateOwner();
             }
         }
-        
+
         /// <summary>
         /// Gets or sets a value that indicates whether the item is enabled.
         /// </summary>
@@ -109,10 +107,10 @@ namespace Ookii.Dialogs.Wpf
         public bool Enabled
         {
             get { return _enabled; }
-            set 
-            { 
+            set
+            {
                 _enabled = value;
-                if( Owner != null )
+                if (Owner != null)
                 {
                     Owner.SetItemEnabled(this);
                 }
@@ -141,7 +139,7 @@ namespace Ookii.Dialogs.Wpf
         internal virtual int Id
         {
             get { return _id; }
-            set 
+            set
             {
                 CheckDuplicateId(null, value);
                 _id = value;
@@ -163,7 +161,7 @@ namespace Ookii.Dialogs.Wpf
         /// </exception>
         public void Click()
         {
-            if( Owner == null )
+            if (Owner == null)
                 throw new InvalidOperationException(Properties.Resources.NoAssociatedTaskDialogError);
 
             Owner.ClickItem(this);
@@ -202,7 +200,7 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         protected void UpdateOwner()
         {
-            if( Owner != null )
+            if (Owner != null)
                 Owner.UpdateDialog();
         }
 
@@ -213,12 +211,12 @@ namespace Ookii.Dialogs.Wpf
 
         internal virtual void AutoAssignId()
         {
-            if( ItemCollection != null )
+            if (ItemCollection != null)
             {
                 int highestId = 9;
-                foreach( TaskDialogItem item in ItemCollection )
+                foreach (TaskDialogItem item in ItemCollection)
                 {
-                    if( item.Id > highestId )
+                    if (item.Id > highestId)
                         highestId = item.Id;
                 }
                 Id = highestId + 1;
@@ -227,14 +225,14 @@ namespace Ookii.Dialogs.Wpf
 
         private void CheckDuplicateId(TaskDialogItem itemToExclude, int id)
         {
-            if( id != 0 )
+            if (id != 0)
             {
                 IEnumerable items = ItemCollection;
-                if( items != null )
+                if (items != null)
                 {
-                    foreach( TaskDialogItem item in items )
+                    foreach (TaskDialogItem item in items)
                     {
-                        if( item != this && item != itemToExclude && item.Id == id )
+                        if (item != this && item != itemToExclude && item.Id == id)
                             throw new InvalidOperationException(Properties.Resources.DuplicateItemIdError);
                     }
                 }

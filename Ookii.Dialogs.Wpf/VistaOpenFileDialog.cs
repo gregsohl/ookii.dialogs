@@ -1,10 +1,8 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
 // See license.txt for details
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+
 using System.ComponentModel;
+using System.IO;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf.Interop;
 
@@ -45,7 +43,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         public VistaOpenFileDialog()
         {
-            if( !IsVistaFileDialogSupported )
+            if (!IsVistaFileDialogSupported)
                 DownlevelDialog = new OpenFileDialog();
         }
 
@@ -82,13 +80,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return ((OpenFileDialog)DownlevelDialog).Multiselect;
                 return GetOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((OpenFileDialog)DownlevelDialog).Multiselect = value;
 
                 SetOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT, value);
@@ -110,13 +108,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return ((OpenFileDialog)DownlevelDialog).ShowReadOnly;
                 return _showReadOnly;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((OpenFileDialog)DownlevelDialog).ShowReadOnly = value;
                 else
                     _showReadOnly = value;
@@ -134,19 +132,19 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return ((OpenFileDialog)DownlevelDialog).ReadOnlyChecked;
                 return _readOnlyChecked;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((OpenFileDialog)DownlevelDialog).ReadOnlyChecked = value;
                 else
                     _readOnlyChecked = value;
             }
         }
-	
+
         #endregion
 
         #region Public Methods
@@ -157,7 +155,7 @@ namespace Ookii.Dialogs.Wpf
         public override void Reset()
         {
             base.Reset();
-            if( DownlevelDialog == null )
+            if (DownlevelDialog == null)
             {
                 CheckFileExists = true;
                 _showReadOnly = false;
@@ -172,7 +170,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
         public System.IO.Stream OpenFile()
         {
-            if( DownlevelDialog != null )
+            if (DownlevelDialog != null)
                 return ((OpenFileDialog)DownlevelDialog).OpenFile();
             else
             {
@@ -193,7 +191,7 @@ namespace Ookii.Dialogs.Wpf
         internal override void SetDialogProperties(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
         {
             base.SetDialogProperties(dialog);
-            if( _showReadOnly )
+            if (_showReadOnly)
             {
                 Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize customize = (Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize)dialog;
                 customize.EnableOpenDropDown(_openDropDownId);
@@ -204,14 +202,14 @@ namespace Ookii.Dialogs.Wpf
 
         internal override void GetResult(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
         {
-            if( Multiselect )
+            if (Multiselect)
             {
                 Ookii.Dialogs.Wpf.Interop.IShellItemArray results;
                 ((Ookii.Dialogs.Wpf.Interop.IFileOpenDialog)dialog).GetResults(out results);
                 uint count;
                 results.GetCount(out count);
                 string[] fileNames = new string[count];
-                for( uint x = 0; x < count; ++x )
+                for (uint x = 0; x < count; ++x)
                 {
                     Ookii.Dialogs.Wpf.Interop.IShellItem item;
                     results.GetItemAt(x, out item);
@@ -225,7 +223,7 @@ namespace Ookii.Dialogs.Wpf
             else
                 FileNamesInternal = null;
 
-            if( ShowReadOnly )
+            if (ShowReadOnly)
             {
                 Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize customize = (Ookii.Dialogs.Wpf.Interop.IFileDialogCustomize)dialog;
                 int selected;
@@ -237,6 +235,5 @@ namespace Ookii.Dialogs.Wpf
         }
 
         #endregion
-
     }
 }

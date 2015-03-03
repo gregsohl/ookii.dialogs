@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Runtime.ConstrainedExecution;
+using System.Runtime.InteropServices;
+using System.Text;
 using Ookii.Dialogs.Wpf.Interop;
 
 namespace Ookii.Dialogs.Wpf
@@ -392,7 +390,7 @@ namespace Ookii.Dialogs.Wpf
             object item;
             Guid guid = new Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe"); // IID_IShellItem
             int hr = NativeMethods.SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out item);
-            if( hr != 0 )
+            if (hr != 0)
                 throw new System.ComponentModel.Win32Exception(hr);
             return (Interop.IShellItem)item;
         }
@@ -411,7 +409,7 @@ namespace Ookii.Dialogs.Wpf
             FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
             FORMAT_MESSAGE_ARGUMENT_ARRAY = 0x00002000
         }
-        
+
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         public static extern int LoadString(SafeModuleHandle hInstance, uint uID, StringBuilder lpBuffer, int nBufferMax);
 
@@ -645,6 +643,5 @@ namespace Ookii.Dialogs.Wpf
 
 
         #endregion
-
     }
 }

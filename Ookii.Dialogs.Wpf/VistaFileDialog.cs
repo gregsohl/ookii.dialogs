@@ -1,15 +1,13 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
 // See license.txt for details
+
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Win32;
-using System.Collections;
-using System.IO;
 using System.ComponentModel;
-using Ookii.Dialogs.Wpf.Interop;
+using System.IO;
 using System.Windows;
 using System.Windows.Interop;
+using Microsoft.Win32;
+using Ookii.Dialogs.Wpf.Interop;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -42,7 +40,7 @@ namespace Ookii.Dialogs.Wpf
         private FileDialog _downlevelDialog;
         private NativeMethods.FOS _options;
         private string _filter;
-        private int _filterIndex ;
+        private int _filterIndex;
         private string[] _fileNames;
         private string _defaultExt;
         private bool _addExtension;
@@ -103,13 +101,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.AddExtension;
                 return _addExtension;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.AddExtension = value;
                 else
                     _addExtension = value;
@@ -128,13 +126,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.CheckFileExists;
                 return GetOption(NativeMethods.FOS.FOS_FILEMUSTEXIST);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.CheckFileExists = value;
                 else
                     SetOption(NativeMethods.FOS.FOS_FILEMUSTEXIST, value);
@@ -153,19 +151,19 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.CheckPathExists;
                 return GetOption(NativeMethods.FOS.FOS_PATHMUSTEXIST);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.CheckPathExists = value;
                 else
                     SetOption(NativeMethods.FOS.FOS_PATHMUSTEXIST, value);
             }
         }
-	
+
         /// <summary>
         /// Gets or sets the default file name extension.
         /// </summary>
@@ -177,21 +175,21 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.DefaultExt;
                 return _defaultExt ?? string.Empty;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.DefaultExt = value;
                 else
                 {
-                    if( value != null )
+                    if (value != null)
                     {
-                        if( value.StartsWith(".", StringComparison.CurrentCulture) )
+                        if (value.StartsWith(".", StringComparison.CurrentCulture))
                             value = value.Substring(1);
-                        else if( value.Length == 0 )
+                        else if (value.Length == 0)
                             value = null;
                     }
 
@@ -213,19 +211,19 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.DereferenceLinks;
                 return !GetOption(NativeMethods.FOS.FOS_NODEREFERENCELINKS);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.DereferenceLinks = value;
                 else
                     SetOption(NativeMethods.FOS.FOS_NODEREFERENCELINKS, !value);
             }
         }
-	
+
 
         /// <summary>
         /// Gets or sets a string containing the file name selected in the file dialog box.
@@ -238,17 +236,17 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.FileName;
 
-                if( _fileNames == null || _fileNames.Length == 0 || string.IsNullOrEmpty(_fileNames[0]) )
+                if (_fileNames == null || _fileNames.Length == 0 || string.IsNullOrEmpty(_fileNames[0]))
                     return string.Empty;
                 else
                     return _fileNames[0];
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.FileName = value;
                 _fileNames = new string[1];
                 _fileNames[0] = value;
@@ -267,7 +265,7 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.FileNames;
                 return FileNamesInternal;
             }
@@ -286,22 +284,22 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.Filter;
                 return _filter;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.Filter = value;
                 else
                 {
-                    if( value != _filter )
+                    if (value != _filter)
                     {
-                        if( !string.IsNullOrEmpty(value) )
+                        if (!string.IsNullOrEmpty(value))
                         {
                             string[] filterElements = value.Split(new char[] { '|' });
-                            if( filterElements == null || filterElements.Length % 2 != 0 )
+                            if (filterElements == null || filterElements.Length % 2 != 0)
                                 throw new ArgumentException(Properties.Resources.InvalidFilterString);
 
                         }
@@ -324,13 +322,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.FilterIndex;
                 return _filterIndex;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.FilterIndex = value;
                 else
                     _filterIndex = value;
@@ -348,17 +346,17 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.InitialDirectory;
 
-                if( _initialDirectory != null )
+                if (_initialDirectory != null)
                     return _initialDirectory;
                 else
                     return string.Empty;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.InitialDirectory = value;
                 else
                     _initialDirectory = value;
@@ -377,13 +375,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.RestoreDirectory;
                 return GetOption(NativeMethods.FOS.FOS_NOCHANGEDIR);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.RestoreDirectory = value;
                 else
                     SetOption(NativeMethods.FOS.FOS_NOCHANGEDIR, value);
@@ -401,22 +399,22 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.Title;
-                if( _title != null )
+                if (_title != null)
                     return _title;
                 else
                     return string.Empty;
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.Title = value;
                 else
                     _title = value;
             }
         }
-	
+
 
         /// <summary>
         /// Gets or sets a value indicating whether the dialog box accepts only valid Win32 file names.
@@ -429,19 +427,19 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return DownlevelDialog.ValidateNames;
                 return !GetOption(NativeMethods.FOS.FOS_NOVALIDATE);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     DownlevelDialog.ValidateNames = value;
                 else
                     SetOption(NativeMethods.FOS.FOS_NOVALIDATE, !value);
             }
         }
-	
+
 
         #endregion
 
@@ -468,7 +466,7 @@ namespace Ookii.Dialogs.Wpf
             set
             {
                 _downlevelDialog = value;
-                if( value != null )
+                if (value != null)
                 {
                     //value.HelpRequest += new EventHandler(DownlevelDialog_HelpRequest);
                     value.FileOk += new System.ComponentModel.CancelEventHandler(DownlevelDialog_FileOk);
@@ -484,7 +482,7 @@ namespace Ookii.Dialogs.Wpf
         {
             private get
             {
-                if( _fileNames == null )
+                if (_fileNames == null)
                 {
                     return new string[0];
                 }
@@ -505,7 +503,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         public virtual void Reset()
         {
-            if( DownlevelDialog != null )
+            if (DownlevelDialog != null)
                 DownlevelDialog.Reset();
             else
             {
@@ -537,7 +535,7 @@ namespace Ookii.Dialogs.Wpf
         public bool? ShowDialog(Window owner)
         {
             _owner = owner;
-            if( DownlevelDialog != null )
+            if (DownlevelDialog != null)
                 return DownlevelDialog.ShowDialog(owner);
             else
             {
@@ -552,7 +550,7 @@ namespace Ookii.Dialogs.Wpf
 
         internal void SetOption(NativeMethods.FOS option, bool value)
         {
-            if( value )
+            if (value)
                 _options |= option;
             else
                 _options &= ~option;
@@ -565,7 +563,7 @@ namespace Ookii.Dialogs.Wpf
 
         internal virtual void GetResult(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
         {
-            if( !GetOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT) )
+            if (!GetOption(NativeMethods.FOS.FOS_ALLOWMULTISELECT))
             {
                 _fileNames = new string[1];
                 Ookii.Dialogs.Wpf.Interop.IShellItem result;
@@ -581,7 +579,7 @@ namespace Ookii.Dialogs.Wpf
         protected virtual void OnFileOk(System.ComponentModel.CancelEventArgs e)
         {
             System.ComponentModel.CancelEventHandler handler = FileOk;
-            if( handler != null )
+            if (handler != null)
                 handler(this, e);
         }
 
@@ -591,25 +589,25 @@ namespace Ookii.Dialogs.Wpf
 
         internal bool PromptUser(string text, MessageBoxButton buttons, MessageBoxImage icon, MessageBoxResult defaultResult)
         {
-            string caption = string.IsNullOrEmpty(_title) ? 
-                (this is VistaOpenFileDialog ? ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.Open) : ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.ConfirmSaveAs)) : 
+            string caption = string.IsNullOrEmpty(_title) ?
+                (this is VistaOpenFileDialog ? ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.Open) : ComDlgResources.LoadString(ComDlgResources.ComDlgResourceId.ConfirmSaveAs)) :
                 _title;
             MessageBoxOptions options = 0;
-            if( System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft )
+            if (System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft)
                 options |= MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading;
             return MessageBox.Show(_owner, text, caption, buttons, icon, defaultResult, options) == MessageBoxResult.Yes;
         }
-        
+
         internal virtual void SetDialogProperties(Ookii.Dialogs.Wpf.Interop.IFileDialog dialog)
         {
             uint cookie;
             dialog.Advise(new VistaFileDialogEvents(this), out cookie);
 
             // Set the default file name
-            if( !(_fileNames == null || _fileNames.Length == 0 || string.IsNullOrEmpty(_fileNames[0])) )
+            if (!(_fileNames == null || _fileNames.Length == 0 || string.IsNullOrEmpty(_fileNames[0])))
             {
                 string parent = Path.GetDirectoryName(_fileNames[0]);
-                if( parent == null || !Directory.Exists(parent) )
+                if (parent == null || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_fileNames[0]);
                 }
@@ -622,35 +620,35 @@ namespace Ookii.Dialogs.Wpf
             }
 
             // Set the filter
-            if( !string.IsNullOrEmpty(_filter) )
+            if (!string.IsNullOrEmpty(_filter))
             {
                 string[] filterElements = _filter.Split(new char[] { '|' });
                 NativeMethods.COMDLG_FILTERSPEC[] filter = new NativeMethods.COMDLG_FILTERSPEC[filterElements.Length / 2];
-                for( int x = 0; x < filterElements.Length; x += 2 )
+                for (int x = 0; x < filterElements.Length; x += 2)
                 {
                     filter[x / 2].pszName = filterElements[x];
                     filter[x / 2].pszSpec = filterElements[x + 1];
                 }
                 dialog.SetFileTypes((uint)filter.Length, filter);
 
-                if( _filterIndex > 0 && _filterIndex <= filter.Length )
+                if (_filterIndex > 0 && _filterIndex <= filter.Length)
                     dialog.SetFileTypeIndex((uint)_filterIndex);
             }
 
             // Default extension
-            if( _addExtension && !string.IsNullOrEmpty(_defaultExt) )
+            if (_addExtension && !string.IsNullOrEmpty(_defaultExt))
             {
                 dialog.SetDefaultExtension(_defaultExt);
             }
 
             // Initial directory
-            if( !string.IsNullOrEmpty(_initialDirectory) )
+            if (!string.IsNullOrEmpty(_initialDirectory))
             {
                 Ookii.Dialogs.Wpf.Interop.IShellItem item = NativeMethods.CreateItemFromParsingName(_initialDirectory);
                 dialog.SetDefaultFolder(item);
             }
 
-            if( !string.IsNullOrEmpty(_title) )
+            if (!string.IsNullOrEmpty(_title))
             {
                 dialog.SetTitle(_title);
             }
@@ -681,9 +679,9 @@ namespace Ookii.Dialogs.Wpf
                 dialog = CreateFileDialog();
                 SetDialogProperties(dialog);
                 int result = dialog.Show(hwndOwner);
-                if( result < 0 )
+                if (result < 0)
                 {
-                    if( result == (int)HRESULT.ERROR_CANCELLED )
+                    if (result == (int)HRESULT.ERROR_CANCELLED)
                         return false;
                     else
                         throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
@@ -692,7 +690,7 @@ namespace Ookii.Dialogs.Wpf
             }
             finally
             {
-                if( dialog != null )
+                if (dialog != null)
                     System.Runtime.InteropServices.Marshal.FinalReleaseComObject(dialog);
             }
         }

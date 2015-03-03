@@ -1,10 +1,8 @@
 // Copyright © Sven Groot (Ookii.org) 2009
 // BSD license; see license.txt for details.
+
 using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -76,7 +74,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="container">The <see cref="IContainer"/> to which the component should be added.</param>
         public ProgressDialog(IContainer container)
         {
-            if( container != null )
+            if (container != null)
                 container.Add(this);
 
             InitializeComponent();
@@ -85,7 +83,7 @@ namespace Ookii.Dialogs.Wpf
             ShowCancelButton = true;
             MinimizeBox = true;
             // Set a default animation for XP.
-            if( !NativeMethods.IsWindowsVistaOrLater )
+            if (!NativeMethods.IsWindowsVistaOrLater)
                 Animation = AnimationResource.GetShellAnimation(Ookii.Dialogs.Wpf.ShellAnimation.FlyingPapers);
         }
 
@@ -128,10 +126,10 @@ namespace Ookii.Dialogs.Wpf
         public string Text
         {
             get { return _text ?? string.Empty; }
-            set 
-            { 
+            set
+            {
                 _text = value;
-                if( _dialog != null )
+                if (_dialog != null)
                     _dialog.SetLine(1, Text, UseCompactPathsForText, IntPtr.Zero);
             }
         }
@@ -157,14 +155,14 @@ namespace Ookii.Dialogs.Wpf
         public bool UseCompactPathsForText
         {
             get { return _useCompactPathsForText; }
-            set 
+            set
             {
                 _useCompactPathsForText = value;
-                if( _dialog != null )
+                if (_dialog != null)
                     _dialog.SetLine(1, Text, UseCompactPathsForText, IntPtr.Zero);
             }
         }
-	
+
         /// <summary>
         /// Gets or sets additional details about the operation being carried out.
         /// </summary>
@@ -185,10 +183,10 @@ namespace Ookii.Dialogs.Wpf
         public string Description
         {
             get { return _description ?? string.Empty; }
-            set 
-            { 
+            set
+            {
                 _description = value;
-                if( _dialog != null )
+                if (_dialog != null)
                     _dialog.SetLine(2, Description, UseCompactPathsForDescription, IntPtr.Zero);
             }
         }
@@ -217,7 +215,7 @@ namespace Ookii.Dialogs.Wpf
             set
             {
                 _useCompactPathsForDescription = value;
-                if( _dialog != null )
+                if (_dialog != null)
                     _dialog.SetLine(2, Description, UseCompactPathsForDescription, IntPtr.Zero);
             }
         }
@@ -317,7 +315,7 @@ namespace Ookii.Dialogs.Wpf
             get
             {
                 _backgroundWorker.ReportProgress(-1); // Call with an out-of-range percentage will update the value of
-                                                      // _cancellationPending but do nothing else.
+                // _cancellationPending but do nothing else.
                 return _cancellationPending;
             }
         }
@@ -564,9 +562,9 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="InvalidOperationException">The progress dialog is not currently being displayed.</exception>
         public void ReportProgress(int percentProgress, string text, string description, object userState)
         {
-            if( percentProgress < 0 || percentProgress > 100 )
+            if (percentProgress < 0 || percentProgress > 100)
                 throw new ArgumentOutOfRangeException("percentProgress");
-            if( _dialog == null )
+            if (_dialog == null)
                 throw new InvalidOperationException(Properties.Resources.ProgressDialogNotRunningError);
             _backgroundWorker.ReportProgress(percentProgress, new ProgressChangedData() { Text = text, Description = description, UserState = userState });
         }
@@ -578,7 +576,7 @@ namespace Ookii.Dialogs.Wpf
         protected virtual void OnDoWork(DoWorkEventArgs e)
         {
             DoWorkEventHandler handler = DoWork;
-            if( handler != null )
+            if (handler != null)
                 handler(this, e);
         }
 
@@ -589,7 +587,7 @@ namespace Ookii.Dialogs.Wpf
         protected virtual void OnRunWorkerCompleted(RunWorkerCompletedEventArgs e)
         {
             RunWorkerCompletedEventHandler handler = RunWorkerCompleted;
-            if( handler != null )
+            if (handler != null)
                 handler(this, e);
         }
 
@@ -600,26 +598,26 @@ namespace Ookii.Dialogs.Wpf
         protected virtual void OnProgressChanged(ProgressChangedEventArgs e)
         {
             ProgressChangedEventHandler handler = ProgressChanged;
-            if( handler != null )
+            if (handler != null)
                 handler(this, e);
         }
 
         private void RunProgressDialog(IntPtr owner, object argument)
         {
-            if( _backgroundWorker.IsBusy )
+            if (_backgroundWorker.IsBusy)
                 throw new InvalidOperationException(Properties.Resources.ProgressDialogRunning);
 
-            if( Animation != null )
+            if (Animation != null)
             {
                 try
                 {
                     _currentAnimationModuleHandle = Animation.LoadLibrary();
                 }
-                catch( Win32Exception ex )
+                catch (Win32Exception ex)
                 {
                     throw new InvalidOperationException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.AnimationLoadErrorFormat, ex.Message), ex);
                 }
-                catch( System.IO.FileNotFoundException ex )
+                catch (System.IO.FileNotFoundException ex)
                 {
                     throw new InvalidOperationException(string.Format(System.Globalization.CultureInfo.CurrentCulture, Properties.Resources.AnimationLoadErrorFormat, ex.Message), ex);
                 }
@@ -628,34 +626,34 @@ namespace Ookii.Dialogs.Wpf
             _cancellationPending = false;
             _dialog = new Interop.ProgressDialog();
             _dialog.SetTitle(WindowTitle);
-            if( Animation != null )
+            if (Animation != null)
                 _dialog.SetAnimation(_currentAnimationModuleHandle, (ushort)Animation.ResourceId);
 
-            if( CancellationText.Length > 0 )
+            if (CancellationText.Length > 0)
                 _dialog.SetCancelMsg(CancellationText, null);
             _dialog.SetLine(1, Text, UseCompactPathsForText, IntPtr.Zero);
             _dialog.SetLine(2, Description, UseCompactPathsForDescription, IntPtr.Zero);
 
             Interop.ProgressDialogFlags flags = Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.Normal;
-            if( owner != IntPtr.Zero )
+            if (owner != IntPtr.Zero)
                 flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.Modal;
-            switch( ProgressBarStyle )
+            switch (ProgressBarStyle)
             {
-            case ProgressBarStyle.None:
-                flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoProgressBar;
-                break;
-            case ProgressBarStyle.MarqueeProgressBar:
-                if( NativeMethods.IsWindowsVistaOrLater )
-                    flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.MarqueeProgress;
-                else
-                    flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoProgressBar; // Older than Vista doesn't support marquee.
-                break;
+                case ProgressBarStyle.None:
+                    flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoProgressBar;
+                    break;
+                case ProgressBarStyle.MarqueeProgressBar:
+                    if (NativeMethods.IsWindowsVistaOrLater)
+                        flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.MarqueeProgress;
+                    else
+                        flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoProgressBar; // Older than Vista doesn't support marquee.
+                    break;
             }
-            if( ShowTimeRemaining )
+            if (ShowTimeRemaining)
                 flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.AutoTime;
-            if( !ShowCancelButton )
+            if (!ShowCancelButton)
                 flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoCancel;
-            if( !MinimizeBox )
+            if (!MinimizeBox)
                 flags |= Ookii.Dialogs.Wpf.Interop.ProgressDialogFlags.NoMinimize;
 
             _dialog.StartProgressDialog(owner, null, flags, IntPtr.Zero);
@@ -672,7 +670,7 @@ namespace Ookii.Dialogs.Wpf
             _dialog.StopProgressDialog();
             Marshal.ReleaseComObject(_dialog);
             _dialog = null;
-            if( _currentAnimationModuleHandle != null )
+            if (_currentAnimationModuleHandle != null)
             {
                 _currentAnimationModuleHandle.Dispose();
                 _currentAnimationModuleHandle = null;
@@ -686,19 +684,19 @@ namespace Ookii.Dialogs.Wpf
             _cancellationPending = _dialog.HasUserCancelled();
             // ReportProgress doesn't allow values outside this range. However, CancellationPending will call
             // BackgroundWorker.ReportProgress directly with a value that is outside this range to update the value of the property.
-            if( e.ProgressPercentage >= 0 && e.ProgressPercentage <= 100 )
+            if (e.ProgressPercentage >= 0 && e.ProgressPercentage <= 100)
             {
                 _dialog.SetProgress((uint)e.ProgressPercentage, 100);
                 ProgressChangedData data = e.UserState as ProgressChangedData;
-                if( data != null )
+                if (data != null)
                 {
-                    if( data.Text != null )
+                    if (data.Text != null)
                         Text = data.Text;
-                    if( data.Description != null )
+                    if (data.Description != null)
                         Description = data.Description;
                     OnProgressChanged(new ProgressChangedEventArgs(e.ProgressPercentage, data.UserState));
                 }
             }
-        }    
+        }
     }
 }

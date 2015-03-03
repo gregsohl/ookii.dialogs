@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Permissions;
-using System.Security;
 using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Ookii.Dialogs.Wpf
 {
-    sealed class ComCtlv6ActivationContext : IDisposable 
+    sealed class ComCtlv6ActivationContext : IDisposable
     {
         // Private data
         private IntPtr _cookie;
@@ -20,11 +15,11 @@ namespace Ookii.Dialogs.Wpf
 
         public ComCtlv6ActivationContext(bool enable)
         {
-            if( enable && NativeMethods.IsWindowsXPOrLater )
+            if (enable && NativeMethods.IsWindowsXPOrLater)
             {
-                if( EnsureActivateContextCreated() )
+                if (EnsureActivateContextCreated())
                 {
-                    if( !NativeMethods.ActivateActCtx(_activationContext, out _cookie) )
+                    if (!NativeMethods.ActivateActCtx(_activationContext, out _cookie))
                     {
                         // Be sure cookie always zero if activation failed
                         _cookie = IntPtr.Zero;
@@ -46,9 +41,9 @@ namespace Ookii.Dialogs.Wpf
 
         private void Dispose(bool disposing)
         {
-            if( _cookie != IntPtr.Zero )
+            if (_cookie != IntPtr.Zero)
             {
-                if( NativeMethods.DeactivateActCtx(0, _cookie) )
+                if (NativeMethods.DeactivateActCtx(0, _cookie))
                 {
                     // deactivation succeeded...
                     _cookie = IntPtr.Zero;
@@ -58,9 +53,9 @@ namespace Ookii.Dialogs.Wpf
 
         private static bool EnsureActivateContextCreated()
         {
-            lock( _contextCreationLock )
+            lock (_contextCreationLock)
             {
-                if( !_contextCreationSucceeded )
+                if (!_contextCreationSucceeded)
                 {
                     // Pull manifest from the .NET Framework install
                     // directory
@@ -71,14 +66,14 @@ namespace Ookii.Dialogs.Wpf
 
                     string manifestLoc = null;
                     string installDir = null;
-                    if( assemblyLoc != null )
+                    if (assemblyLoc != null)
                     {
                         installDir = Path.GetDirectoryName(assemblyLoc);
                         const string manifestName = "XPThemes.manifest";
                         manifestLoc = Path.Combine(installDir, manifestName);
                     }
 
-                    if( manifestLoc != null && installDir != null )
+                    if (manifestLoc != null && installDir != null)
                     {
                         _enableThemingActivationContext = new NativeMethods.ACTCTX();
                         _enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(NativeMethods.ACTCTX));

@@ -1,13 +1,11 @@
 // Copyright (c) Sven Groot (Ookii.org) 2009
 // See license.txt for details
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+
 using System.ComponentModel;
+using System.IO;
+using System.Windows;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf.Interop;
-using System.Windows;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -44,7 +42,7 @@ namespace Ookii.Dialogs.Wpf
         /// </summary>
         public VistaSaveFileDialog()
         {
-            if( !IsVistaFileDialogSupported )
+            if (!IsVistaFileDialogSupported)
                 DownlevelDialog = new SaveFileDialog();
         }
 
@@ -64,13 +62,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return ((SaveFileDialog)DownlevelDialog).CreatePrompt;
                 return GetOption(NativeMethods.FOS.FOS_CREATEPROMPT);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((SaveFileDialog)DownlevelDialog).CreatePrompt = value;
                 else
                     SetOption(NativeMethods.FOS.FOS_CREATEPROMPT, value);
@@ -91,13 +89,13 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     return ((SaveFileDialog)DownlevelDialog).OverwritePrompt;
                 return GetOption(NativeMethods.FOS.FOS_OVERWRITEPROMPT);
             }
             set
             {
-                if( DownlevelDialog != null )
+                if (DownlevelDialog != null)
                     ((SaveFileDialog)DownlevelDialog).OverwritePrompt = value;
                 else
                     SetOption(NativeMethods.FOS.FOS_OVERWRITEPROMPT, value);
@@ -114,7 +112,7 @@ namespace Ookii.Dialogs.Wpf
         public override void Reset()
         {
             base.Reset();
-            if( DownlevelDialog == null )
+            if (DownlevelDialog == null)
             {
                 OverwritePrompt = true;
             }
@@ -127,7 +125,7 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="System.ArgumentNullException">The file name is <see langword="null" />.</exception>
         public System.IO.Stream OpenFile()
         {
-            if( DownlevelDialog != null )
+            if (DownlevelDialog != null)
                 return ((SaveFileDialog)DownlevelDialog).OpenFile();
             else
             {
@@ -150,17 +148,17 @@ namespace Ookii.Dialogs.Wpf
             // the fact that these flags only works on open file dialogs, and then prompts manually. Similarly, the 
             // FOS_CREATEPROMPT and FOS_FILEMUSTEXIST flags don't actually work on IFileSaveDialog, so we have to implement 
             // the prompt manually.
-            if( DownlevelDialog == null )
+            if (DownlevelDialog == null)
             {
-                if( CheckFileExists && !File.Exists(FileName) )
+                if (CheckFileExists && !File.Exists(FileName))
                 {
                     PromptUser(ComDlgResources.FormatString(ComDlgResources.ComDlgResourceId.FileNotFound, Path.GetFileName(FileName)), MessageBoxButton.OK, MessageBoxImage.Exclamation, MessageBoxResult.OK);
                     e.Cancel = true;
                     return;
                 }
-                if( CreatePrompt && !File.Exists(FileName) )
+                if (CreatePrompt && !File.Exists(FileName))
                 {
-                    if( !PromptUser(ComDlgResources.FormatString(ComDlgResources.ComDlgResourceId.CreatePrompt, Path.GetFileName(FileName)), MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) )
+                    if (!PromptUser(ComDlgResources.FormatString(ComDlgResources.ComDlgResourceId.CreatePrompt, Path.GetFileName(FileName)), MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No))
                     {
                         e.Cancel = true;
                         return;
@@ -180,6 +178,5 @@ namespace Ookii.Dialogs.Wpf
         }
 
         #endregion
-
     }
 }

@@ -1,15 +1,15 @@
 // Copyright © Sven Groot (Ookii.org) 2009
 // BSD license; see license.txt for details.
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Security.Permissions;
+using System.ComponentModel;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using System.Text;
 using System.Windows;
 using System.Windows.Interop;
-using System.ComponentModel;
 
 namespace Ookii.Dialogs.Wpf
 {
@@ -71,7 +71,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="container">The <see cref="IContainer"/> to add the component to.</param>
         public CredentialDialog(IContainer container)
         {
-            if( container != null )
+            if (container != null)
                 container.Add(this);
 
             InitializeComponent();
@@ -108,7 +108,7 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         [Category("Behavior"), Description("Indicates whether to use the application instance credential cache."), DefaultValue(false)]
         public bool UseApplicationInstanceCredentialCache { get; set; }
-        
+
         /// <summary>
         /// Gets or sets whether the "save password" checkbox is checked.
         /// </summary>
@@ -195,8 +195,8 @@ namespace Ookii.Dialogs.Wpf
         public string Target
         {
             get { return _target ?? string.Empty; }
-            set 
-            { 
+            set
+            {
                 _target = value;
                 _confirmTarget = null;
             }
@@ -424,14 +424,14 @@ namespace Ookii.Dialogs.Wpf
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public bool ShowDialog(Window owner)
         {
-            if( string.IsNullOrEmpty(_target) )
+            if (string.IsNullOrEmpty(_target))
                 throw new InvalidOperationException(Properties.Resources.CredentialEmptyTargetError);
 
             UserName = "";
             Password = "";
             IsStoredCredential = false;
 
-            if( RetrieveCredentialsFromApplicationInstanceCache() )
+            if (RetrieveCredentialsFromApplicationInstanceCache())
             {
                 IsStoredCredential = true;
                 _confirmTarget = Target;
@@ -439,10 +439,10 @@ namespace Ookii.Dialogs.Wpf
             }
 
             bool storedCredentials = false;
-            if( ShowSaveCheckBox && RetrieveCredentials() )
+            if (ShowSaveCheckBox && RetrieveCredentials())
             {
                 IsSaveChecked = true;
-                if( !ShowUIForSavedCredentials )
+                if (!ShowUIForSavedCredentials)
                 {
                     IsStoredCredential = true;
                     _confirmTarget = Target;
@@ -453,7 +453,7 @@ namespace Ookii.Dialogs.Wpf
 
             IntPtr ownerHandle = owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
             bool result;
-            if( NativeMethods.IsWindowsVistaOrLater )
+            if (NativeMethods.IsWindowsVistaOrLater)
                 result = PromptForCredentialsCredUIWin(ownerHandle, storedCredentials);
             else
                 result = PromptForCredentialsCredUI(ownerHandle, storedCredentials);
@@ -475,16 +475,16 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="CredentialException">There was an error saving the credentials.</exception>
         public void ConfirmCredentials(bool confirm)
         {
-            if( _confirmTarget == null || _confirmTarget != Target )
+            if (_confirmTarget == null || _confirmTarget != Target)
                 throw new InvalidOperationException(Properties.Resources.CredentialPromptNotCalled);
 
             _confirmTarget = null;
 
-            if( IsSaveChecked && confirm )
+            if (IsSaveChecked && confirm)
             {
-                if( UseApplicationInstanceCredentialCache )
+                if (UseApplicationInstanceCredentialCache)
                 {
-                    lock( _applicationInstanceCredentialCache )
+                    lock (_applicationInstanceCredentialCache)
                     {
                         _applicationInstanceCredentialCache[Target] = new System.Net.NetworkCredential(UserName, Password);
                     }
@@ -526,11 +526,11 @@ namespace Ookii.Dialogs.Wpf
         /// </remarks>
         public static void StoreCredential(string target, NetworkCredential credential)
         {
-            if( target == null )
+            if (target == null)
                 throw new ArgumentNullException("target");
-            if( target.Length == 0 )
+            if (target.Length == 0)
                 throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
-            if( credential == null )
+            if (credential == null)
                 throw new ArgumentNullException("credential");
 
             NativeMethods.CREDENTIAL c = new NativeMethods.CREDENTIAL();
@@ -544,7 +544,7 @@ namespace Ookii.Dialogs.Wpf
                 System.Runtime.InteropServices.Marshal.Copy(encryptedPassword, 0, c.CredentialBlob, encryptedPassword.Length);
                 c.CredentialBlobSize = (uint)encryptedPassword.Length;
                 c.Type = NativeMethods.CredTypes.CRED_TYPE_GENERIC;
-                if( !NativeMethods.CredWrite(ref c, 0) )
+                if (!NativeMethods.CredWrite(ref c, 0))
                     throw new CredentialException(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             }
             finally
@@ -573,19 +573,19 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="CredentialException">An error occurred retrieving the credentials.</exception>
         public static NetworkCredential RetrieveCredential(string target)
         {
-            if( target == null )
+            if (target == null)
                 throw new ArgumentNullException("target");
-            if( target.Length == 0 )
+            if (target.Length == 0)
                 throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
 
             NetworkCredential cred = RetrieveCredentialFromApplicationInstanceCache(target);
-            if( cred != null )
+            if (cred != null)
                 return cred;
 
             IntPtr credential;
             bool result = NativeMethods.CredRead(target, NativeMethods.CredTypes.CRED_TYPE_GENERIC, 0, out credential);
             int error = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
-            if( result )
+            if (result)
             {
                 try
                 {
@@ -602,7 +602,7 @@ namespace Ookii.Dialogs.Wpf
             }
             else
             {
-                if( error == (int)NativeMethods.CredUIReturnCodes.ERROR_NOT_FOUND )
+                if (error == (int)NativeMethods.CredUIReturnCodes.ERROR_NOT_FOUND)
                     return null;
                 else
                     throw new CredentialException(error);
@@ -624,15 +624,15 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="ArgumentException"><paramref name="target"/> is an empty string ("").</exception>
         public static NetworkCredential RetrieveCredentialFromApplicationInstanceCache(string target)
         {
-            if( target == null )
+            if (target == null)
                 throw new ArgumentNullException("target");
-            if( target.Length == 0 )
+            if (target.Length == 0)
                 throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
 
-            lock( _applicationInstanceCredentialCache )
+            lock (_applicationInstanceCredentialCache)
             {
                 System.Net.NetworkCredential cred;
-                if( _applicationInstanceCredentialCache.TryGetValue(target, out cred) )
+                if (_applicationInstanceCredentialCache.TryGetValue(target, out cred))
                 {
                     return cred;
                 }
@@ -658,25 +658,25 @@ namespace Ookii.Dialogs.Wpf
         /// <exception cref="CredentialException">An error occurred deleting the credentials from the operating system's credential store.</exception>
         public static bool DeleteCredential(string target)
         {
-            if( target == null )
+            if (target == null)
                 throw new ArgumentNullException("target");
-            if( target.Length == 0 )
+            if (target.Length == 0)
                 throw new ArgumentException(Properties.Resources.CredentialEmptyTargetError, "target");
 
             bool found = false;
-            lock( _applicationInstanceCredentialCache )
+            lock (_applicationInstanceCredentialCache)
             {
                 found = _applicationInstanceCredentialCache.Remove(target);
             }
 
-            if( NativeMethods.CredDelete(target, NativeMethods.CredTypes.CRED_TYPE_GENERIC, 0) )
+            if (NativeMethods.CredDelete(target, NativeMethods.CredTypes.CRED_TYPE_GENERIC, 0))
             {
                 found = true;
             }
             else
             {
                 int error = Marshal.GetLastWin32Error();
-                if( error != (int)NativeMethods.CredUIReturnCodes.ERROR_NOT_FOUND )
+                if (error != (int)NativeMethods.CredUIReturnCodes.ERROR_NOT_FOUND)
                     throw new CredentialException(error);
             }
             return found;
@@ -688,7 +688,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">The <see cref="EventArgs"/> containing data for the event.</param>
         protected virtual void OnUserNameChanged(EventArgs e)
         {
-            if( UserNameChanged != null )
+            if (UserNameChanged != null)
                 UserNameChanged(this, e);
         }
 
@@ -698,7 +698,7 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">The <see cref="EventArgs"/> containing data for the event.</param>
         protected virtual void OnPasswordChanged(EventArgs e)
         {
-            if( PasswordChanged != null )
+            if (PasswordChanged != null)
                 PasswordChanged(this, e);
         }
 
@@ -706,7 +706,7 @@ namespace Ookii.Dialogs.Wpf
         {
             NativeMethods.CREDUI_INFO info = CreateCredUIInfo(owner, true);
             NativeMethods.CREDUI_FLAGS flags = NativeMethods.CREDUI_FLAGS.GENERIC_CREDENTIALS | NativeMethods.CREDUI_FLAGS.DO_NOT_PERSIST | NativeMethods.CREDUI_FLAGS.ALWAYS_SHOW_UI;
-            if( ShowSaveCheckBox )
+            if (ShowSaveCheckBox)
                 flags |= NativeMethods.CREDUI_FLAGS.SHOW_SAVE_CHECK_BOX;
 
             StringBuilder user = new StringBuilder(NativeMethods.CREDUI_MAX_USERNAME_LENGTH);
@@ -715,17 +715,17 @@ namespace Ookii.Dialogs.Wpf
             pw.Append(Password);
 
             NativeMethods.CredUIReturnCodes result = NativeMethods.CredUIPromptForCredentials(ref info, Target, IntPtr.Zero, 0, user, NativeMethods.CREDUI_MAX_USERNAME_LENGTH, pw, NativeMethods.CREDUI_MAX_PASSWORD_LENGTH, ref _isSaveChecked, flags);
-            switch( result )
+            switch (result)
             {
                 case NativeMethods.CredUIReturnCodes.NO_ERROR:
                     UserName = user.ToString();
                     Password = pw.ToString();
-                    if( ShowSaveCheckBox )
+                    if (ShowSaveCheckBox)
                     {
                         _confirmTarget = Target;
                         // If the credential was stored previously but the user has now cleared the save checkbox,
                         // we want to delete the credential.
-                        if( storedCredentials && !IsSaveChecked )
+                        if (storedCredentials && !IsSaveChecked)
                             DeleteCredential(Target);
                     }
                     return true;
@@ -740,7 +740,7 @@ namespace Ookii.Dialogs.Wpf
         {
             NativeMethods.CREDUI_INFO info = CreateCredUIInfo(owner, false);
             NativeMethods.CredUIWinFlags flags = NativeMethods.CredUIWinFlags.Generic;
-            if( ShowSaveCheckBox )
+            if (ShowSaveCheckBox)
                 flags |= NativeMethods.CredUIWinFlags.Checkbox;
 
             IntPtr inBuffer = IntPtr.Zero;
@@ -748,13 +748,13 @@ namespace Ookii.Dialogs.Wpf
             try
             {
                 uint inBufferSize = 0;
-                if( UserName.Length > 0 )
+                if (UserName.Length > 0)
                 {
                     NativeMethods.CredPackAuthenticationBuffer(0, UserName, Password, IntPtr.Zero, ref inBufferSize);
-                    if( inBufferSize > 0 )
+                    if (inBufferSize > 0)
                     {
                         inBuffer = Marshal.AllocCoTaskMem((int)inBufferSize);
-                        if( !NativeMethods.CredPackAuthenticationBuffer(0, UserName, Password, inBuffer, ref inBufferSize) )
+                        if (!NativeMethods.CredPackAuthenticationBuffer(0, UserName, Password, inBuffer, ref inBufferSize))
                             throw new CredentialException(Marshal.GetLastWin32Error());
                     }
                 }
@@ -762,38 +762,38 @@ namespace Ookii.Dialogs.Wpf
                 uint outBufferSize;
                 uint package = 0;
                 NativeMethods.CredUIReturnCodes result = NativeMethods.CredUIPromptForWindowsCredentials(ref info, 0, ref package, inBuffer, inBufferSize, out outBuffer, out outBufferSize, ref _isSaveChecked, flags);
-                switch( result )
+                switch (result)
                 {
-                case NativeMethods.CredUIReturnCodes.NO_ERROR:
-                    StringBuilder userName = new StringBuilder(NativeMethods.CREDUI_MAX_USERNAME_LENGTH);
-                    StringBuilder password = new StringBuilder(NativeMethods.CREDUI_MAX_PASSWORD_LENGTH);
-                    uint userNameSize = (uint)userName.Capacity;
-                    uint passwordSize = (uint)password.Capacity;
-                    uint domainSize = 0;
-                    if( !NativeMethods.CredUnPackAuthenticationBuffer(0, outBuffer, outBufferSize, userName, ref userNameSize, null, ref domainSize, password, ref passwordSize) )
-                        throw new CredentialException(Marshal.GetLastWin32Error());
-                    UserName = userName.ToString();
-                    Password = password.ToString();
-                    if( ShowSaveCheckBox )
-                    {
-                        _confirmTarget = Target;
-                        // If the credential was stored previously but the user has now cleared the save checkbox,
-                        // we want to delete the credential.
-                        if( storedCredentials && !IsSaveChecked )
-                            DeleteCredential(Target);
-                    }
-                    return true;
-                case NativeMethods.CredUIReturnCodes.ERROR_CANCELLED:
-                    return false;
-                default:
-                    throw new CredentialException((int)result);
+                    case NativeMethods.CredUIReturnCodes.NO_ERROR:
+                        StringBuilder userName = new StringBuilder(NativeMethods.CREDUI_MAX_USERNAME_LENGTH);
+                        StringBuilder password = new StringBuilder(NativeMethods.CREDUI_MAX_PASSWORD_LENGTH);
+                        uint userNameSize = (uint)userName.Capacity;
+                        uint passwordSize = (uint)password.Capacity;
+                        uint domainSize = 0;
+                        if (!NativeMethods.CredUnPackAuthenticationBuffer(0, outBuffer, outBufferSize, userName, ref userNameSize, null, ref domainSize, password, ref passwordSize))
+                            throw new CredentialException(Marshal.GetLastWin32Error());
+                        UserName = userName.ToString();
+                        Password = password.ToString();
+                        if (ShowSaveCheckBox)
+                        {
+                            _confirmTarget = Target;
+                            // If the credential was stored previously but the user has now cleared the save checkbox,
+                            // we want to delete the credential.
+                            if (storedCredentials && !IsSaveChecked)
+                                DeleteCredential(Target);
+                        }
+                        return true;
+                    case NativeMethods.CredUIReturnCodes.ERROR_CANCELLED:
+                        return false;
+                    default:
+                        throw new CredentialException((int)result);
                 }
             }
             finally
             {
-                if( inBuffer != IntPtr.Zero )
+                if (inBuffer != IntPtr.Zero)
                     Marshal.FreeCoTaskMem(inBuffer);
-                if( outBuffer != IntPtr.Zero )
+                if (outBuffer != IntPtr.Zero)
                     Marshal.FreeCoTaskMem(outBuffer);
             }
         }
@@ -803,25 +803,25 @@ namespace Ookii.Dialogs.Wpf
             NativeMethods.CREDUI_INFO info = new NativeMethods.CREDUI_INFO();
             info.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(info);
             info.hwndParent = owner;
-            if( downlevelText )
+            if (downlevelText)
             {
                 info.pszCaptionText = WindowTitle;
-                switch( DownlevelTextMode )
+                switch (DownlevelTextMode)
                 {
-                case DownlevelTextMode.MainInstructionAndContent:
-                    if( MainInstruction.Length == 0 )
-                        info.pszMessageText = Content;
-                    else if( Content.Length == 0 )
+                    case DownlevelTextMode.MainInstructionAndContent:
+                        if (MainInstruction.Length == 0)
+                            info.pszMessageText = Content;
+                        else if (Content.Length == 0)
+                            info.pszMessageText = MainInstruction;
+                        else
+                            info.pszMessageText = MainInstruction + Environment.NewLine + Environment.NewLine + Content;
+                        break;
+                    case DownlevelTextMode.MainInstructionOnly:
                         info.pszMessageText = MainInstruction;
-                    else
-                        info.pszMessageText = MainInstruction + Environment.NewLine + Environment.NewLine + Content;
-                    break;
-                case DownlevelTextMode.MainInstructionOnly:
-                    info.pszMessageText = MainInstruction;
-                    break;
-                case DownlevelTextMode.ContentOnly:
-                    info.pszMessageText = Content;
-                    break;
+                        break;
+                    case DownlevelTextMode.ContentOnly:
+                        info.pszMessageText = Content;
+                        break;
                 }
             }
             else
@@ -836,7 +836,7 @@ namespace Ookii.Dialogs.Wpf
         private bool RetrieveCredentials()
         {
             NetworkCredential credential = RetrieveCredential(Target);
-            if( credential != null )
+            if (credential != null)
             {
                 UserName = credential.UserName;
                 Password = credential.Password;
@@ -857,7 +857,7 @@ namespace Ookii.Dialogs.Wpf
             {
                 return System.Text.Encoding.UTF8.GetString(System.Security.Cryptography.ProtectedData.Unprotect(encrypted, null, System.Security.Cryptography.DataProtectionScope.CurrentUser));
             }
-            catch( System.Security.Cryptography.CryptographicException )
+            catch (System.Security.Cryptography.CryptographicException)
             {
                 return string.Empty;
             }
@@ -865,10 +865,10 @@ namespace Ookii.Dialogs.Wpf
 
         private bool RetrieveCredentialsFromApplicationInstanceCache()
         {
-            if( UseApplicationInstanceCredentialCache )
+            if (UseApplicationInstanceCredentialCache)
             {
                 NetworkCredential credential = RetrieveCredentialFromApplicationInstanceCache(Target);
-                if( credential != null )
+                if (credential != null)
                 {
                     UserName = credential.UserName;
                     Password = credential.Password;

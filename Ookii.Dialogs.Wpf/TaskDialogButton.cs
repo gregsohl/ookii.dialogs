@@ -1,8 +1,7 @@
 // Copyright © Sven Groot (Ookii.org) 2009
 // BSD license; see license.txt for details.
+
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -65,9 +64,9 @@ namespace Ookii.Dialogs.Wpf
         public ButtonType ButtonType
         {
             get { return _type; }
-            set 
+            set
             {
-                if( value != ButtonType.Custom )
+                if (value != ButtonType.Custom)
                 {
                     CheckDuplicateButton(value, null);
                     _type = value;
@@ -104,12 +103,12 @@ namespace Ookii.Dialogs.Wpf
         {
             get { return _commandLinkNote ?? string.Empty; }
             set
-            { 
+            {
                 _commandLinkNote = value;
                 UpdateOwner();
             }
         }
-	
+
 
         /// <summary>
         /// Gets or sets a value that indicates if the button is the default button on the dialog.
@@ -126,11 +125,11 @@ namespace Ookii.Dialogs.Wpf
             set
             {
                 _default = value;
-                if( value && Owner != null )
+                if (value && Owner != null)
                 {
-                    foreach( TaskDialogButton button in Owner.Buttons )
+                    foreach (TaskDialogButton button in Owner.Buttons)
                     {
-                        if( button != this )
+                        if (button != this)
                             button.Default = false;
                     }
                 }
@@ -150,19 +149,19 @@ namespace Ookii.Dialogs.Wpf
         /// Elevation is not performed by the task dialog; the code implementing the operation that results from
         /// the button being clicked is responsible for performing elevation if required.
         /// </remarks>
-        [Category("Behavior"), Description("Indicates whether the Task Dialog button or command link should have a User Account Control (UAC) shield icon (in other words, whether the action invoked by the button requires elevation)."), DefaultValue(false)] 
+        [Category("Behavior"), Description("Indicates whether the Task Dialog button or command link should have a User Account Control (UAC) shield icon (in other words, whether the action invoked by the button requires elevation)."), DefaultValue(false)]
         public bool ElevationRequired
         {
             get { return _elevationRequired; }
-            set 
-            { 
+            set
+            {
                 _elevationRequired = value;
-                if( Owner != null )
+                if (Owner != null)
                     Owner.SetButtonElevationRequired(this);
             }
         }
-	
-	
+
+
         internal override int Id
         {
             get
@@ -171,9 +170,9 @@ namespace Ookii.Dialogs.Wpf
             }
             set
             {
-                if( base.Id != value )
+                if (base.Id != value)
                 {
-                    if( _type != ButtonType.Custom )
+                    if (_type != ButtonType.Custom)
                         throw new InvalidOperationException(Properties.Resources.NonCustomTaskDialogButtonIdError);
                     base.Id = value;
                 }
@@ -182,7 +181,7 @@ namespace Ookii.Dialogs.Wpf
 
         internal override void AutoAssignId()
         {
-            if( _type == ButtonType.Custom )
+            if (_type == ButtonType.Custom)
                 base.AutoAssignId();
         }
 
@@ -196,22 +195,22 @@ namespace Ookii.Dialogs.Wpf
         {
             get
             {
-                switch( _type )
+                switch (_type)
                 {
-                case ButtonType.Ok:
-                    return NativeMethods.TaskDialogCommonButtonFlags.OkButton;
-                case ButtonType.Yes:
-                    return NativeMethods.TaskDialogCommonButtonFlags.YesButton;
-                case ButtonType.No:
-                    return NativeMethods.TaskDialogCommonButtonFlags.NoButton;
-                case ButtonType.Cancel:
-                    return NativeMethods.TaskDialogCommonButtonFlags.CancelButton;
-                case ButtonType.Retry:
-                    return NativeMethods.TaskDialogCommonButtonFlags.RetryButton;
-                case ButtonType.Close:
-                    return NativeMethods.TaskDialogCommonButtonFlags.CloseButton;
-                default:
-                    return 0;
+                    case ButtonType.Ok:
+                        return NativeMethods.TaskDialogCommonButtonFlags.OkButton;
+                    case ButtonType.Yes:
+                        return NativeMethods.TaskDialogCommonButtonFlags.YesButton;
+                    case ButtonType.No:
+                        return NativeMethods.TaskDialogCommonButtonFlags.NoButton;
+                    case ButtonType.Cancel:
+                        return NativeMethods.TaskDialogCommonButtonFlags.CancelButton;
+                    case ButtonType.Retry:
+                        return NativeMethods.TaskDialogCommonButtonFlags.RetryButton;
+                    case ButtonType.Close:
+                        return NativeMethods.TaskDialogCommonButtonFlags.CloseButton;
+                    default:
+                        return 0;
                 }
             }
         }
@@ -225,9 +224,9 @@ namespace Ookii.Dialogs.Wpf
         /// </value>
         protected override System.Collections.IEnumerable ItemCollection
         {
-            get 
+            get
             {
-                if( Owner != null )
+                if (Owner != null)
                     return Owner.Buttons;
                 return null;
             }
@@ -235,11 +234,11 @@ namespace Ookii.Dialogs.Wpf
 
         private void CheckDuplicateButton(ButtonType type, TaskDialogItem itemToExclude)
         {
-            if( type != ButtonType.Custom && Owner != null )
+            if (type != ButtonType.Custom && Owner != null)
             {
-                foreach( TaskDialogButton button in Owner.Buttons )
+                foreach (TaskDialogButton button in Owner.Buttons)
                 {
-                    if( button != this && button != itemToExclude && button.ButtonType == type )
+                    if (button != this && button != itemToExclude && button.ButtonType == type)
                         throw new InvalidOperationException(Properties.Resources.DuplicateButtonTypeError);
                 }
             }

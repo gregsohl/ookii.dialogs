@@ -1,22 +1,16 @@
 // Copyright (c) Sven Groot (Ookii.org) 2006
 // See license.txt for details
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ookii.Dialogs.Wpf
 {
     class VistaFileDialogEvents : Ookii.Dialogs.Wpf.Interop.IFileDialogEvents, Ookii.Dialogs.Wpf.Interop.IFileDialogControlEvents
     {
-        const uint S_OK = 0;
-        const uint S_FALSE = 1;
-        const uint E_NOTIMPL = 0x80004001;
-
         private VistaFileDialog _dialog;
 
         public VistaFileDialogEvents(VistaFileDialog dialog)
         {
-            if( dialog == null )
+            if (dialog == null)
                 throw new ArgumentNullException("dialog");
 
             _dialog = dialog;
@@ -26,7 +20,7 @@ namespace Ookii.Dialogs.Wpf
 
         public Ookii.Dialogs.Wpf.Interop.HRESULT OnFileOk(Ookii.Dialogs.Wpf.Interop.IFileDialog pfd)
         {
-            if( _dialog.DoFileOk(pfd) )
+            if (_dialog.DoFileOk(pfd))
                 return Ookii.Dialogs.Wpf.Interop.HRESULT.S_OK;
             else
                 return Ookii.Dialogs.Wpf.Interop.HRESULT.S_FALSE;
@@ -80,7 +74,5 @@ namespace Ookii.Dialogs.Wpf
         }
 
         #endregion
-
-
     }
 }
