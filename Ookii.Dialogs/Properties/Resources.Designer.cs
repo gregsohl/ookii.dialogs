@@ -178,15 +178,6 @@ namespace Ookii.Dialogs.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview.
-        /// </summary>
-        internal static string Preview {
-            get {
-                return ResourceManager.GetString("Preview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The progress dialog is not shown..
         /// </summary>
         internal static string ProgressDialogNotRunningError {

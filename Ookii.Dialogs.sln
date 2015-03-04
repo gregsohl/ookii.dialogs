@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Wpf.Sample", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs", "Ookii.Dialogs\Ookii.Dialogs.csproj", "{779E62B3-C5A6-494D-9D87-96C0DEC7FFB0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Sample", "Ookii.Dialogs.Sample\Ookii.Dialogs.Sample.csproj", "{D52F3B1C-03B3-41B1-A15E-E23FF6877939}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Forms", "Windows Forms", "{AA33BC46-6B86-429D-820B-40C469F7A103}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{9D4C4874-703B-463B-A67C-834A6D823BCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +39,18 @@ Global
 		{779E62B3-C5A6-494D-9D87-96C0DEC7FFB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{779E62B3-C5A6-494D-9D87-96C0DEC7FFB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{779E62B3-C5A6-494D-9D87-96C0DEC7FFB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D52F3B1C-03B3-41B1-A15E-E23FF6877939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D52F3B1C-03B3-41B1-A15E-E23FF6877939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D52F3B1C-03B3-41B1-A15E-E23FF6877939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D52F3B1C-03B3-41B1-A15E-E23FF6877939}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D01B1D20-8F5B-4834-8E5C-C7EC6DD587D4} = {9D4C4874-703B-463B-A67C-834A6D823BCE}
+		{E38181B2-E8E5-466D-9099-33FE75B4CFA1} = {9D4C4874-703B-463B-A67C-834A6D823BCE}
+		{779E62B3-C5A6-494D-9D87-96C0DEC7FFB0} = {AA33BC46-6B86-429D-820B-40C469F7A103}
+		{D52F3B1C-03B3-41B1-A15E-E23FF6877939} = {AA33BC46-6B86-429D-820B-40C469F7A103}
 	EndGlobalSection
 EndGlobal
