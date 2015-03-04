@@ -6,8 +6,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows;
-using System.Windows.Interop;
 using Ookii.Dialogs.Wpf.Interop;
 
 namespace Ookii.Dialogs.Wpf
@@ -22,7 +20,7 @@ namespace Ookii.Dialogs.Wpf
     /// </remarks>
     /// <threadsafety instance="false" static="true" />
     [DefaultEvent("HelpRequest"), Designer("System.Windows.Forms.Design.FolderBrowserDialogDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), DefaultProperty("SelectedPath"), Description("Prompts the user to select a folder.")]
-    public sealed class VistaFolderBrowserDialog
+    public sealed class VistaFolderBrowserDialog : Microsoft.Win32.CommonDialog
     {
         private string _description;
         private string _selectedPath;
@@ -128,7 +126,7 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Resets all properties to their default values.
         /// </summary>
-        public void Reset()
+        public override void Reset()
         {
             _description = string.Empty;
             UseDescriptionForTitle = false;
@@ -141,28 +139,22 @@ namespace Ookii.Dialogs.Wpf
         /// Displays the folder browser dialog.
         /// </summary>
         /// <returns>If the user clicks the OK button, <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
-        public bool? ShowDialog()
+        public override bool? ShowDialog()
         {
-            return ShowDialog(null);
-        }
-
-        /// <summary>
-        /// Displays the folder browser dialog.
-        /// </summary>
-        /// <param name="owner">Handle to the window that owns the dialog.</param>
-        /// <returns>If the user clicks the OK button, <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
-        public bool? ShowDialog(Window owner)
-        {
-            IntPtr ownerHandle = owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
-            return new bool?(IsVistaFolderDialogSupported ? RunDialog(ownerHandle) : RunDialogDownlevel(ownerHandle));
+            CheckPermissionsToShowDialog();
+            return RunDialog(NativeMethods.GetActiveWindow());
         }
 
         #endregion
 
         #region Private Methods
 
-        private bool RunDialog(IntPtr owner)
+        /// <summary>
+        ///  When overridden in a derived class, displays a particular type of common dialog box.
+        /// </summary>
+        protected override bool RunDialog(IntPtr owner)
         {
+            if (!IsVistaFolderDialogSupported) return RunDialogDownlevel(owner);
             Ookii.Dialogs.Wpf.Interop.IFileDialog dialog = null;
             try
             {
