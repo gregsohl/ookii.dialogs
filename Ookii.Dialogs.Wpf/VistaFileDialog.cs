@@ -33,7 +33,7 @@ namespace Ookii.Dialogs.Wpf
     /// </remarks>
     /// <threadsafety instance="false" static="true" />
     [DefaultEvent("FileOk"), DefaultProperty("FileName")]
-    public abstract class VistaFileDialog
+    public abstract class VistaFileDialog : Microsoft.Win32.CommonDialog
     {
         internal const int HelpButtonId = 0x4001;
 
@@ -415,7 +415,6 @@ namespace Ookii.Dialogs.Wpf
             }
         }
 
-
         /// <summary>
         /// Gets or sets a value indicating whether the dialog box accepts only valid Win32 file names.
         /// </summary>
@@ -439,7 +438,6 @@ namespace Ookii.Dialogs.Wpf
                     SetOption(NativeMethods.FOS.FOS_NOVALIDATE, !value);
             }
         }
-
 
         #endregion
 
@@ -501,7 +499,7 @@ namespace Ookii.Dialogs.Wpf
         /// <summary>
         /// Resets all properties to their default values.
         /// </summary>
-        public virtual void Reset()
+        public override void Reset()
         {
             if (DownlevelDialog != null)
                 DownlevelDialog.Reset();
@@ -522,26 +520,11 @@ namespace Ookii.Dialogs.Wpf
         /// Displays the file dialog.
         /// </summary>
         /// <returns>If the user clicks the OK button of the dialog that is displayed (e.g. <see cref="VistaOpenFileDialog" />, <see cref="VistaSaveFileDialog" />), <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
-        public bool? ShowDialog()
+        public override bool? ShowDialog()
         {
-            return ShowDialog(null);
-        }
-
-        /// <summary>
-        /// Displays the file dialog.
-        /// </summary>
-        /// <param name="owner">Handle to the window that owns the dialog.</param>
-        /// <returns>If the user clicks the OK button of the dialog that is displayed (e.g. <see cref="VistaOpenFileDialog" />, <see cref="VistaSaveFileDialog" />), <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
-        public bool? ShowDialog(Window owner)
-        {
-            _owner = owner;
-            if (DownlevelDialog != null)
-                return DownlevelDialog.ShowDialog(owner);
-            else
-            {
-                IntPtr ownerHandle = owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
-                return new bool?(RunFileDialog(ownerHandle));
-            }
+            CheckPermissionsToShowDialog();
+            _owner = null;
+            return RunDialog(NativeMethods.GetActiveWindow());
         }
 
         #endregion
@@ -578,9 +561,39 @@ namespace Ookii.Dialogs.Wpf
         /// <param name="e">A <see cref="System.ComponentModel.CancelEventArgs" /> that contains the event data.</param>
         protected virtual void OnFileOk(System.ComponentModel.CancelEventArgs e)
         {
-            System.ComponentModel.CancelEventHandler handler = FileOk;
-            if (handler != null)
-                handler(this, e);
+            if (this.FileOk != null) this.FileOk(this, e);
+        }
+
+        /// <summary>
+        ///  When overridden in a derived class, displays a particular type of common dialog box.
+        /// </summary>
+        protected override bool RunDialog(IntPtr hwndOwner)
+        {
+            Window owner = (Window)HwndSource.FromHwnd(hwndOwner).RootVisual;
+            _owner = owner;
+            if (DownlevelDialog != null)
+                return DownlevelDialog.ShowDialog(owner) ?? false;
+
+            Ookii.Dialogs.Wpf.Interop.IFileDialog dialog = null;
+            try
+            {
+                dialog = CreateFileDialog();
+                SetDialogProperties(dialog);
+                int result = dialog.Show(hwndOwner);
+                if (result < 0)
+                {
+                    if (result == (int)HRESULT.ERROR_CANCELLED)
+                        return false;
+                    else
+                        throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
+                }
+                return true;
+            }
+            finally
+            {
+                if (dialog != null)
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(dialog);
+            }
         }
 
         #endregion
@@ -670,30 +683,6 @@ namespace Ookii.Dialogs.Wpf
         #endregion
 
         #region Private Methods
-
-        private bool RunFileDialog(IntPtr hwndOwner)
-        {
-            Ookii.Dialogs.Wpf.Interop.IFileDialog dialog = null;
-            try
-            {
-                dialog = CreateFileDialog();
-                SetDialogProperties(dialog);
-                int result = dialog.Show(hwndOwner);
-                if (result < 0)
-                {
-                    if (result == (int)HRESULT.ERROR_CANCELLED)
-                        return false;
-                    else
-                        throw System.Runtime.InteropServices.Marshal.GetExceptionForHR(result);
-                }
-                return true;
-            }
-            finally
-            {
-                if (dialog != null)
-                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(dialog);
-            }
-        }
 
         private void DownlevelDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
