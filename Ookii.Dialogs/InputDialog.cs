@@ -74,7 +74,7 @@ namespace Ookii.Dialogs
         /// When running on Windows Vista or newer, the main instruction of the input dialog will be displayed in a larger font and a different color than
         /// the other text of the input dialog. Otherwise, it will be shown in bold.
         /// </remarks>
-        [Localizable(true), Category("Appearance"), Description("The dialog's main instruction."), DefaultValue(""), Editor(typeof(System.ComponentModel.Design.MultilineStringEditor), typeof(UITypeEditor))]
+        [Localizable(true), Category("Appearance"), Description("The dialog's main instruction."), DefaultValue(""), Editor("System.ComponentModel.Design.MultilineStringEditor, System.Design", typeof(UITypeEditor))]
         public string MainInstruction
         {
             get { return _mainInstruction ?? string.Empty; }
@@ -90,7 +90,7 @@ namespace Ookii.Dialogs
         /// <value>
         /// The dialog's primary content. The default value is an empty string ("").
         /// </value>
-        [Localizable(true), Category("Appearance"), Description("The dialog's primary content."), DefaultValue(""), Editor(typeof(System.ComponentModel.Design.MultilineStringEditor), typeof(UITypeEditor))]
+        [Localizable(true), Category("Appearance"), Description("The dialog's primary content."), DefaultValue(""), Editor("System.ComponentModel.Design.MultilineStringEditor, System.Design", typeof(UITypeEditor))]
         public string Content
         {
             get { return _content ?? string.Empty; }
