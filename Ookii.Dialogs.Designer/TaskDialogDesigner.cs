@@ -1,12 +1,12 @@
-// Copyright © Sven Groot (Ookii.org) 2009
-// BSD license; see license.txt for details.
-
-using System;
+ï»¿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Linq;
+using System.Text;
 
-namespace Ookii.Dialogs.Wpf
+namespace Ookii.Dialogs.Design
 {
-    class TaskDialogDesigner : ComponentDesigner
+    public class TaskDialogDesigner : ComponentDesigner
     {
         public override DesignerVerbCollection Verbs
         {
@@ -20,7 +20,8 @@ namespace Ookii.Dialogs.Wpf
 
         private void Preview(object sender, EventArgs e)
         {
-            ((TaskDialog)Component).ShowDialog();
+            //todo reflection
+            //((TaskDialog)Component).ShowDialog();
         }
     }
 }
