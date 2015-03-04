@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 
 namespace Ookii.Dialogs.Design
 {
@@ -20,8 +18,9 @@ namespace Ookii.Dialogs.Design
 
         private void Preview(object sender, EventArgs e)
         {
-            //todo reflection
-            //((TaskDialog)Component).ShowDialog();
+            Type typeTaskDialog = Component.GetType();
+            MethodInfo showDlg = typeTaskDialog.GetMethod("ShowDialog", Type.EmptyTypes);
+            if (showDlg != null) showDlg.Invoke(Component, null);
         }
     }
 }
