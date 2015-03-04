@@ -34,7 +34,7 @@ namespace Ookii.Dialogs.Wpf
     /// </para>
     /// </remarks>
     /// <threadsafety instance="false" static="true" />
-    [Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), Description("Prompts the user to open a file.")]
+    [Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), Description("Prompts the user to open a file.")]
     public sealed class VistaSaveFileDialog : VistaFileDialog
     {
         /// <summary>
