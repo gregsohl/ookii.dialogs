@@ -17,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Forms", "Windows Fo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{9D4C4874-703B-463B-A67C-834A6D823BCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ookii.Dialogs.Common", "Ookii.Dialogs.Common\Ookii.Dialogs.Common.csproj", "{9C053EB7-108E-453C-ADE9-BDBA39385111}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,10 +43,6 @@ Global
 		{D52F3B1C-03B3-41B1-A15E-E23FF6877939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D52F3B1C-03B3-41B1-A15E-E23FF6877939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D52F3B1C-03B3-41B1-A15E-E23FF6877939}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C053EB7-108E-453C-ADE9-BDBA39385111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C053EB7-108E-453C-ADE9-BDBA39385111}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C053EB7-108E-453C-ADE9-BDBA39385111}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C053EB7-108E-453C-ADE9-BDBA39385111}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
